@@ -33,7 +33,6 @@ chrome.runtime.sendMessage({ action: 'offscreenReady' });
 
 async function runCheck(seenIds, csrfToken, config) {
   const { tech, geoId } = config;
-  chrome.runtime.sendMessage({ action: 'debugInfo', info: { step: 'runCheck started', hasCsrf: !!csrfToken, tech, geoId } });
   try {
     const allJobs = [];
 
@@ -45,15 +44,6 @@ async function runCheck(seenIds, csrfToken, config) {
     const unique = [...new Map(allJobs.map((j) => [j.id, j])).values()];
     const filtered = unique.filter((j) => titleMatches(j.title, tech));
     const fresh = filtered.filter((j) => !seenIds.includes(j.id));
-
-    chrome.runtime.sendMessage({ action: 'debugInfo', info: {
-      step: 'runCheck done',
-      totalFetched: allJobs.length,
-      uniqueCount: unique.length,
-      afterFilter: filtered.length,
-      freshCount: fresh.length,
-      sampleTitles: unique.slice(0, 5).map((j) => j.title),
-    }});
 
     chrome.runtime.sendMessage({ action: 'newJobsFound', jobs: filtered, fresh });
   } catch (err) {
@@ -83,22 +73,12 @@ async function fetchJobs(query, csrfToken, geoId) {
       },
     });
 
-    const respText = resp.ok ? null : await resp.text();
-    chrome.runtime.sendMessage({ action: 'debugInfo', info: { query, page, status: resp.status, errorBody: respText?.slice(0, 300) } });
-    if (!resp.ok) break;
+    if (!resp.ok) {
+      console.warn(`[LJob] fetch failed (${resp.status}) for "${query}" page ${page}`);
+      break;
+    }
 
     const data = await resp.json();
-    const debugInfo = {
-      query,
-      page,
-      responseKeys: Object.keys(data),
-      dataKeys: data.data ? Object.keys(data.data) : [],
-      elementsCount: data.data?.elements?.length ?? data.elements?.length ?? 0,
-      includedCount: data.included?.length ?? 0,
-      firstIncluded: data.included?.[0] ? JSON.stringify(data.included[0]).slice(0, 600) : null,
-      dataElementsSample: data.data?.elements?.[0] ? JSON.stringify(data.data.elements[0]).slice(0, 400) : null,
-    };
-    chrome.runtime.sendMessage({ action: 'debugInfo', info: debugInfo });
     const jobs = parseVoyagerResponse(data);
     console.log(`[LJob] parsed ${jobs.length} jobs (page ${page})`);
     allJobs.push(...jobs);

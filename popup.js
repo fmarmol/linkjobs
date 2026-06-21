@@ -2,8 +2,6 @@ const statusEl = document.getElementById('status');
 const lastCheckEl = document.getElementById('lastCheck');
 const jobList = document.getElementById('jobList');
 const checkBtn = document.getElementById('checkBtn');
-const debugTimeEl = document.getElementById('debugTime');
-const debugBodyEl = document.getElementById('debugBody');
 const techInput = document.getElementById('techInput');
 const regionSelect = document.getElementById('regionSelect');
 const saveBtn = document.getElementById('saveBtn');
@@ -56,19 +54,16 @@ saveBtn.addEventListener('click', async () => {
 });
 
 async function render() {
-  const { jobs = [], lastCheck, status = '', debugInfo } = await chrome.storage.local.get([
+  const { jobs = [], lastCheck, status = '' } = await chrome.storage.local.get([
     'jobs',
     'lastCheck',
     'status',
-    'debugInfo',
   ]);
 
   statusEl.textContent = status;
   lastCheckEl.textContent = lastCheck
     ? `Last check: ${new Date(lastCheck).toLocaleTimeString('fr-FR')}`
     : 'Never checked';
-
-  renderDebug(debugInfo);
 
   if (jobs.length === 0) {
     jobList.innerHTML = '<div class="empty">No matching jobs found yet.<br>Check runs every 30 min — or hit “Check now”.</div>';
@@ -92,19 +87,6 @@ async function render() {
         </div>`;
     })
     .join('');
-}
-
-function renderDebug(debugInfo) {
-  if (!debugInfo) {
-    debugTimeEl.textContent = '';
-    debugBodyEl.textContent = 'No debug data yet.';
-    return;
-  }
-  const { ts, ...rest } = debugInfo;
-  debugTimeEl.textContent = ts
-    ? new Date(ts).toLocaleTimeString('fr-FR')
-    : '';
-  debugBodyEl.textContent = JSON.stringify(rest, null, 2);
 }
 
 function escHtml(str) {

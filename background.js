@@ -42,9 +42,6 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     console.error('[LJob] error:', msg.error);
     chrome.storage.local.set({ status: 'Error: ' + msg.error });
   }
-  if (msg.action === 'debugInfo') {
-    chrome.storage.local.set({ debugInfo: { ...msg.info, ts: Date.now() } });
-  }
 });
 
 async function ensureOffscreenAndCheck() {

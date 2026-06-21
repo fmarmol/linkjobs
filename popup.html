@@ -119,32 +119,6 @@
       margin-left: 4px;
       vertical-align: middle;
     }
-    #debug {
-      border-top: 1px solid #ddd;
-      background: #fafafa;
-      font-size: 11px;
-    }
-    #debug summary {
-      padding: 8px 16px;
-      cursor: pointer;
-      color: #666;
-      user-select: none;
-      display: flex;
-      justify-content: space-between;
-    }
-    #debugTime { color: #999; font-weight: 400; }
-    #debugBody {
-      margin: 0;
-      padding: 8px 16px 12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 10px;
-      line-height: 1.5;
-      color: #333;
-      white-space: pre-wrap;
-      word-break: break-word;
-      max-height: 240px;
-      overflow-y: auto;
-    }
   </style>
 </head>
 <body>
@@ -166,10 +140,6 @@
     <button id="saveBtn">Save &amp; search</button>
   </div>
   <div id="jobList"><div class="empty">Loading…</div></div>
-  <details id="debug">
-    <summary><span>Debug info</span><span id="debugTime"></span></summary>
-    <pre id="debugBody">No debug data yet.</pre>
-  </details>
   <script src="popup.js"></script>
 </body>
 </html>
