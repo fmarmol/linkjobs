@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>LJob</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      width: 380px;
+      background: #f3f2ef;
+      color: #1d2226;
+    }
+    header {
+      background: #0a66c2;
+      color: #fff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 16px; font-weight: 700; }
+    #status { font-size: 11px; opacity: .8; }
+    .meta {
+      padding: 8px 16px;
+      font-size: 11px;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+    }
+    #checkBtn {
+      font-size: 11px;
+      padding: 4px 10px;
+      border: 1px solid #0a66c2;
+      border-radius: 12px;
+      background: transparent;
+      color: #0a66c2;
+      cursor: pointer;
+    }
+    #checkBtn:hover { background: #e8f0fe; }
+    .config {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 10px;
+      padding: 10px 16px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      align-items: end;
+    }
+    .config label {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    .config input,
+    .config select {
+      font-size: 13px;
+      padding: 5px 7px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+      color: #1d2226;
+    }
+    .config input:focus,
+    .config select:focus { outline: none; border-color: #0a66c2; }
+    #saveBtn {
+      grid-column: 1 / -1;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      background: #0a66c2;
+      color: #fff;
+      cursor: pointer;
+    }
+    #saveBtn:hover { background: #004182; }
+    #jobList { max-height: 420px; overflow-y: auto; }
+    .job-card {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 12px 16px;
+    }
+    .job-card:hover { background: #f8f8f8; }
+    .job-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0a66c2;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .job-title:hover { text-decoration: underline; }
+    .job-meta { font-size: 11px; color: #666; }
+    .job-company { font-weight: 500; color: #444; }
+    .empty {
+      padding: 24px 16px;
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+      background: #fff;
+    }
+    .new-badge {
+      display: inline-block;
+      background: #e8f0fe;
+      color: #0a66c2;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 8px;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+    #debug {
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+      font-size: 11px;
+    }
+    #debug summary {
+      padding: 8px 16px;
+      cursor: pointer;
+      color: #666;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+    }
+    #debugTime { color: #999; font-weight: 400; }
+    #debugBody {
+      margin: 0;
+      padding: 8px 16px 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 10px;
+      line-height: 1.5;
+      color: #333;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LJob · Job Monitor</h1>
+    <span id="status">–</span>
+  </header>
+  <div class="meta">
+    <span id="lastCheck">Never checked</span>
+    <button id="checkBtn">Check now</button>
+  </div>
+  <div class="config">
+    <label>Technology
+      <input id="techInput" type="text" placeholder="golang" autocomplete="off" />
+    </label>
+    <label>Region
+      <select id="regionSelect"></select>
+    </label>
+    <button id="saveBtn">Save &amp; search</button>
+  </div>
+  <div id="jobList"><div class="empty">Loading…</div></div>
+  <details id="debug">
+    <summary><span>Debug info</span><span id="debugTime"></span></summary>
+    <pre id="debugBody">No debug data yet.</pre>
+  </details>
+  <script src="popup.js"></script>
+</body>
+</html>
